@@ -4,49 +4,93 @@ import 'package:peliculas/src/models/pelicula_model.dart';
 class MovieHorizontal extends StatelessWidget {
   // const MovieHorizontal({Key key}) : super(key: key);
 
-    final List<Pelicula> peliculas;
-    MovieHorizontal({ @required this.peliculas }); 
+  final List<Pelicula> peliculas;
+  final Function siguientePagina;
+
+  MovieHorizontal({@required this.peliculas, @required this.siguientePagina});
 
   @override
   Widget build(BuildContext context) {
-
     final _screenSize = MediaQuery.of(context).size;
+
+    final _pageController = PageController(
+      initialPage: 1,
+      viewportFraction: 0.3,
+    );
+
+    _pageController.addListener(() {
+      if (_pageController.position.pixels >=
+          _pageController.position.maxScrollExtent - 200) {
+        siguientePagina();
+      }
+    });
+
     return Container(
-      height: _screenSize.height * 0.22,
-      child: PageView(
+      height: _screenSize.height * 0.2,
+      child: PageView.builder(
         pageSnapping: false,
-        controller: PageController(
-          initialPage: 2,
-          viewportFraction: 0.23,
-        ),
-        children: _tarjetas(context),
+        controller: _pageController,
+        itemCount: peliculas.length,
+        itemBuilder: (context, i) {
+          return _tarjeta(context, peliculas[i]);
+        },
       ),
     );
   }
 
-  List<Widget> _tarjetas(BuildContext context) {
-    return peliculas.map((pelicula) {
-      return Container(
-        margin: EdgeInsets.only(right: 5.0),
-        child: Column(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/img/no-image.jpg'), 
-                image: NetworkImage(pelicula.getPosterImage()),
-                fit: BoxFit.cover,
-                height: 110.0,
-              ),
+  Widget _tarjeta(BuildContext context, Pelicula pelicula) {
+    return Container(
+      margin: EdgeInsets.only(right: 5.0),
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: FadeInImage(
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              image: NetworkImage(pelicula.getPosterImage()),
+              fit: BoxFit.cover,
+              height: 160.0,
             ),
-            Text(
-              pelicula.title,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
-            ),
-          ],
-        ),
-      );
-    }).toList();
+          ),
+          SizedBox(
+            height: 5.0,
+          ),
+          Text(
+            pelicula.title,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    );
   }
+
+//   List<Widget> _tarjetas(BuildContext context) {
+//     return peliculas.map((pelicula) {
+//       return Container(
+//         margin: EdgeInsets.only(right: 5.0),
+//         child: Column(
+//           children: <Widget>[
+//             ClipRRect(
+//               borderRadius: BorderRadius.circular(10.0),
+//               child: FadeInImage(
+//                 placeholder: AssetImage('assets/img/no-image.jpg'),
+//                 image: NetworkImage(pelicula.getPosterImage()),
+//                 fit: BoxFit.cover,
+//                 height: 160.0,
+//               ),
+//             ),
+//             SizedBox(
+//               height: 5.0,
+//             ),
+//             Text(
+//               pelicula.title,
+//               overflow: TextOverflow.ellipsis,
+//               style: Theme.of(context).textTheme.caption,
+//             ),
+//           ],
+//         ),
+//       );
+//     }).toList();
+//   }
 }
