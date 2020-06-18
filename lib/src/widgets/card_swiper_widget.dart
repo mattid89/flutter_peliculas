@@ -18,7 +18,7 @@ class CardSwiper extends StatelessWidget {
     final _itemWidth = _screenSize.width * 0.6;
 
     return Container(
-      padding: EdgeInsets.only(top: 5.0),
+      // padding: EdgeInsets.only(top: 5.0),
       child: Swiper(
         layout: SwiperLayout.STACK,
         itemWidth: _itemWidth,
@@ -36,7 +36,7 @@ class CardSwiper extends StatelessWidget {
         itemCount: peliculas.length,
         // pagination: new SwiperPagination(),
         // control: new SwiperControl(),
-        ),
+      ),
     );
   }
 }
