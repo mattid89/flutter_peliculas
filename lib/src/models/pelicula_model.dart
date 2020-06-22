@@ -68,5 +68,11 @@ class Pelicula {
     final _imageNoPosterPath = 'https://www.samsung.com/etc/designs/smg/global/imgs/support/cont/NO_IMG_600x600.png';
     return posterPath == null ? _imageNoPosterPath : _imagesUrl+posterPath;
   }
+
+  getBackgroundImage() {
+    final _imagesUrl = 'https://image.tmdb.org/t/p/w500/';
+    final _imageNoBackdropPath = 'https://www.samsung.com/etc/designs/smg/global/imgs/support/cont/NO_IMG_600x600.png';
+    return backdropPath == null ? _imageNoBackdropPath : _imagesUrl+backdropPath;
+  }
 }
 

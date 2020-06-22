@@ -31,15 +31,14 @@ class MovieHorizontal extends StatelessWidget {
         pageSnapping: false,
         controller: _pageController,
         itemCount: peliculas.length,
-        itemBuilder: (context, i) {
-          return _tarjeta(context, peliculas[i]);
-        },
+        itemBuilder: (context, i) => _tarjeta(context, peliculas[i]),
       ),
     );
   }
 
   Widget _tarjeta(BuildContext context, Pelicula pelicula) {
-    return Container(
+
+    final tarjeta = Container(
       margin: EdgeInsets.only(right: 5.0),
       child: Column(
         children: <Widget>[
@@ -62,6 +61,16 @@ class MovieHorizontal extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    return GestureDetector(
+      child: tarjeta,
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          'detalle',
+          arguments: pelicula);
+      },
     );
   }
 

@@ -14,8 +14,8 @@ class CardSwiper extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final _screenSize = MediaQuery.of(context).size;
-    final _itemHeight = _screenSize.height * 0.4;
-    final _itemWidth = _screenSize.width * 0.6;
+    final _itemHeight = _screenSize.height * 0.5;
+    final _itemWidth = _screenSize.width * 0.65;
 
     return Container(
       // padding: EdgeInsets.only(top: 5.0),
