@@ -31,12 +31,12 @@ class MovieHorizontal extends StatelessWidget {
         pageSnapping: false,
         controller: _pageController,
         itemCount: peliculas.length,
-        itemBuilder: (context, i) => _tarjeta(context, peliculas[i]),
+        itemBuilder: (context, i) => _tarjeta(context, peliculas[i], _screenSize),
       ),
     );
   }
 
-  Widget _tarjeta(BuildContext context, Pelicula pelicula) {
+  Widget _tarjeta(BuildContext context, Pelicula pelicula, Size size) {
 
     final tarjeta = Container(
       margin: EdgeInsets.only(right: 5.0),
@@ -48,7 +48,7 @@ class MovieHorizontal extends StatelessWidget {
               placeholder: AssetImage('assets/img/no-image.jpg'),
               image: NetworkImage(pelicula.getPosterImage()),
               fit: BoxFit.cover,
-              height: 160.0,
+              height: size.height * 0.20,
             ),
           ),
           SizedBox(

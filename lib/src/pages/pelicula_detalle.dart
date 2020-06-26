@@ -18,9 +18,7 @@ class PeliculaDetallePage extends StatelessWidget {
                 SizedBox(height: 10.0,),
                 _posterTitulo(pelicula, context),
                 _descripcion(pelicula),
-                _descripcion(pelicula),
-                _descripcion(pelicula),
-                _descripcion(pelicula),
+                // _crearActores(pelicula),
               ]
             )
           )
@@ -109,4 +107,8 @@ class PeliculaDetallePage extends StatelessWidget {
       ),
     );
   }
+
+  // Widget _crearActores(Pelicula pelicula) {
+
+  // }
 }
