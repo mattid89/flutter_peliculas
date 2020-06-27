@@ -46,7 +46,7 @@ class Actor {
 
     getPicture() {
       final _imagesUrl = 'https://image.tmdb.org/t/p/w500/';
-      final _imageNoProfilePath = 'https://www.risimaging.com/wp-content/uploads/2015/06/staff-no-avatar-male-500x640.jpg';
+      final _imageNoProfilePath = 'https://viphomegaragedoors.com/wp-content/uploads/2018/02/person-placeholder.png';
       return profilePath == null ? _imageNoProfilePath : _imagesUrl+profilePath;
     }
 }

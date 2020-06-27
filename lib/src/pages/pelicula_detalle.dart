@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:peliculas/src/models/actores_model.dart';
 import 'package:peliculas/src/models/pelicula_model.dart';
+import 'package:peliculas/src/providers/peliculas_provider.dart';
 
 class PeliculaDetallePage extends StatelessWidget {
 
@@ -18,7 +20,7 @@ class PeliculaDetallePage extends StatelessWidget {
                 SizedBox(height: 10.0,),
                 _posterTitulo(pelicula, context),
                 _descripcion(pelicula),
-                // _crearActores(pelicula),
+                _crearActores(pelicula),
               ]
             )
           )
@@ -59,11 +61,14 @@ class PeliculaDetallePage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Image(
-              image: NetworkImage(pelicula.getPosterImage()),
-              height: 150.0,
+          Hero(
+            tag: pelicula.uniqueID,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Image(
+                image: NetworkImage(pelicula.getPosterImage()),
+                height: 150.0,
+              ),
             ),
           ),
           SizedBox(width: 20.0,),
@@ -108,7 +113,64 @@ class PeliculaDetallePage extends StatelessWidget {
     );
   }
 
-  // Widget _crearActores(Pelicula pelicula) {
+  Widget _crearActores(Pelicula pelicula) {
+    final peliProvider = new PeliculasProvider();
 
-  // }
+    return FutureBuilder(
+      future: peliProvider.getCast(pelicula.id.toString()),
+      builder: (BuildContext context, AsyncSnapshot<List<Actor>> snapshot) {
+        if (snapshot.hasData) {
+          return _createActoresPageView( snapshot.data );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _createActoresPageView(List<Actor> actores) {
+    return SizedBox(
+      height: 200.0,
+      child: PageView.builder(
+        pageSnapping: false,
+        controller: PageController(
+          viewportFraction: 0.3,
+          initialPage: 1
+        ),
+        itemCount: actores.length,
+        itemBuilder: (context, i) => _actor(actores[i]),
+      ),
+    );
+  }
+
+  Widget _actor(Actor actor) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: FadeInImage(
+                placeholder: AssetImage('assets/img/no-image.jpg'),
+                image: NetworkImage(actor.getPicture()),
+                fit: BoxFit.cover,
+                height: 150.0,
+              ),
+          ),
+          Text(
+            actor.name,
+            textAlign: TextAlign.center,
+            // style: TextStyle(
+            //   shadows: [Shadow(
+            //     color: Colors.grey,
+            //     offset: Offset(2.0, 2.0),
+            //     blurRadius: 2.0
+            //   )],
+            // ),
+          )
+        ],
+      ),
+    );
+  }
 }
