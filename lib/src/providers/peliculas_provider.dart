@@ -6,21 +6,21 @@ import 'package:peliculas/src/models/pelicula_model.dart';
 import 'package:http/http.dart';
 
 class PeliculasProvider {
-
   String _apiKey = '256fe8ed1197695aafa914ca83b54720';
   String _url = 'api.themoviedb.org';
   String _language = 'es-ES';
-  int _pageOne = 1;
+  String _pageOne = '1';
   int _pagePopulars = 0;
-  int _page = 0;
 
   bool _cargando = false;
 
   List<Pelicula> _populars = new List();
 
-  final _popularsStreamController = StreamController<List<Pelicula>>.broadcast();
+  final _popularsStreamController =
+      StreamController<List<Pelicula>>.broadcast();
 
-  Function(List<Pelicula>) get popularsSink => _popularsStreamController.sink.add;
+  Function(List<Pelicula>) get popularsSink =>
+      _popularsStreamController.sink.add;
   Stream<List<Pelicula>> get popularsStream => _popularsStreamController.stream;
 
   void disposeStreams() {
@@ -41,41 +41,43 @@ class PeliculasProvider {
     return actores.items;
   }
 
-  Uri _uriBuilder(String endpoint) {
+  Uri _uriBuilder(String endpoint, String page, [String query]) {
     return Uri.https(_url, endpoint, {
       'api_key': _apiKey,
       'language': _language,
-      'page': _page.toString()
+      'page': page,
+      'query': query == null ? '' : query
     });
   }
 
   Future<List<Pelicula>> getNowPlaying() async {
-    _page = _pageOne;
-    final url = _uriBuilder('3/movie/now_playing');
+    final url = _uriBuilder('3/movie/now_playing', _pageOne);
     return await _resolveMovieRequest(url);
   }
 
-    Future<List<Actor>> getCast(String movieId) async {
-    _page = _pageOne;
-    final url = _uriBuilder('3/movie/$movieId/credits');
+  Future<List<Actor>> getCast(String movieId) async {
+    final url = _uriBuilder('3/movie/$movieId/credits', _pageOne);
     return await _resolveCastRequest(url);
   }
-  
-  void getPopulars() async {
 
+  void getPopulars() async {
     /// como se esta llamando continuamente el get populares cunado el scroll
     /// llega al final de la lista de peliculas, debo evitar que se llamen
     /// muchas veces a la api rest de las peliculas innecesariamente
-    if(_cargando) return;
+    if (_cargando) return;
     _cargando = true;
 
     _pagePopulars++;
-    _page = _pagePopulars;
-    final url = _uriBuilder('3/movie/popular');
+    final url = _uriBuilder('3/movie/popular', _pagePopulars.toString());
     final res = await _resolveMovieRequest(url);
     _populars.addAll(res);
     popularsSink(_populars);
 
     _cargando = false;
+  }
+
+  Future<List<Pelicula>> searchMovie(String query) async {
+    final url = _uriBuilder('3/search/movie', _pageOne, query);
+    return await _resolveMovieRequest(url);
   }
 }
