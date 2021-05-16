@@ -14,7 +14,7 @@ class PeliculasProvider {
 
   bool _cargando = false;
 
-  List<Pelicula> _populars = new List();
+  List<Pelicula> _populars = [];
 
   final _popularsStreamController =
       StreamController<List<Pelicula>>.broadcast();
